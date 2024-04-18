@@ -8,8 +8,8 @@ const bcrypt = require('bcrypt')
 let sequelize
 
 if(process.env.NODE_ENV === 'production'){
-  sequelize = new Sequelize('lx5j5awchtmbzfur', 'r9gpw5fcqh467njz', 'bdj5k0tk531etvq7', {
-    host: 'cxmgkzhk95kfgbq4.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+  sequelize = new Sequelize('	zskdrfb18v6u36gz', 'l9m8pf5z9g8z1hbc', 'yi240m5j8jw9m8ho', {
+    host: 'uyu7j8yohcwo35j3.cbetxkdyhwsb.us-east-1.rds.amazonaws.com	',
     dialect: 'mariadb',
     dialectOptions: {
       timezone: 'Etc/GMT-2',
