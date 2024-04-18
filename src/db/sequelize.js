@@ -14,6 +14,7 @@ if(process.env.NODE_ENV === 'production'){
     dialectOptions: {
       timezone: 'Etc/GMT-2',
     },
+    port: 3306,
     logging: true
   })
 }else{
