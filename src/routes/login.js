@@ -13,7 +13,7 @@ module.exports = (app) => {
         return res.status(404).json({ message })
       }
 
-      bcrypt.compare(req.body.password, user.password)
+      return bcrypt.compare(req.body.password, user.password)
         .then(isPasswordValid => {
                 if(!isPasswordValid) {
                     const message = `Le mot de passe est incorrect.`
@@ -23,7 +23,7 @@ module.exports = (app) => {
                 // Générer un jeton JWT valide pendant 24 heures.
                 jwt.sign({ userId: user.id },privateKey,{ expiresIn: 3600 * 24 }, (err, token) =>{
                     if (err) throw err;
-                    return res.json({ message, data: user, token })
+                    return res.json({ message, data: user, token: `Bearer ` + token })
                 }
             );
       })
