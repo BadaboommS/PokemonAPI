@@ -13,19 +13,17 @@ module.exports = (app) => {
         return res.status(404).json({ message })
       }
 
-      return bcrypt.compare(req.body.password, user.password)
-        .then(isPasswordValid => {
-                if(!isPasswordValid) {
-                    const message = `Le mot de passe est incorrect.`
-                    return res.status(401).json({message})
-                }
+      return bcrypt.compare(req.body.password, user.password).then(isPasswordValid => {
+        if(!isPasswordValid) {
+          const message = `Le mot de passe est incorrect.`
+          return res.status(401).json({message})
+        }
 
-                // Générer un jeton JWT valide pendant 24 heures.
-                jwt.sign({ userId: user.id },privateKey,{ expiresIn: 3600 * 24 }, (err, token) =>{
-                    if (err) throw err;
-                    return res.json({ message, data: user, token: `Bearer ` + token })
-                }
-            );
+        // Générer un jeton JWT valide pendant 24 heures.
+        const token = `Bearer ` + jwt.sign({ userId: user.id },privateKey,{expiresIn: '24h'});
+
+        const message = `L'utilisateur a été connecté avec succès`;
+        return res.json({ message, data: user, token })
       })
     })
     .catch(error => {
