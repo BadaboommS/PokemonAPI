@@ -6,24 +6,23 @@ const privateKey = require('../auth/private_key')
 module.exports = (app) => {
   app.post('/api/login', (req, res) => {
 
-    User.findOne({ where: { username: req.body.username } }).then(user => {
+    User.findOne({ where: { username: req.body.username } }).then(foundUser => {
 
-      if(!user) {
+      if(!foundUser) {
         const message = `L'utilisateur demandé n'existe pas.`
         return res.status(404).json({ message })
       }
 
-      bcrypt.compare(req.body.password, user.password).then(isPasswordValid => {
+      bcrypt.compare(req.body.password, foundUser.password).then(isPasswordValid => {
         if(!isPasswordValid) {
           const message = `Le mot de passe est incorrect.`
           return res.status(401).json({message})
         }
 
-        // Générer un jeton JWT valide pendant 24 heures.
-        const token = `Bearer ` + jwt.sign({ userId: user.id },privateKey,{expiresIn: 3600 * 24});
+        const token = `Bearer ` + jwt.sign({ userId: foundUser.id },privateKey,{expiresIn: '24h'});
 
         const message = `L'utilisateur a été connecté avec succès`;
-        return res.json({ message, data: user, token: token })
+        return res.json({ message, data: foundUser, token: token })
       })
     })
     .catch(error => {

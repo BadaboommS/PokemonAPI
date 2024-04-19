@@ -4,7 +4,10 @@ const PokemonModel = require('../models/pokemon')
 const UserModel = require('../models/user')
 const pokemons = require('./mock-pokemon')
 const bcrypt = require('bcrypt')
-  
+
+//change mode production / development
+process.env.NODE_ENV = 'development'
+
 let sequelize
 
 if(process.env.NODE_ENV === 'production'){
@@ -33,13 +36,21 @@ const Pokemon = PokemonModel(sequelize, DataTypes)
 const User = UserModel(sequelize, DataTypes)
   
 const initDb = () => {
-  return sequelize.sync().then(_ => {
+  return sequelize.sync({force: true}).then(_ => {
     pokemons.map(pokemon => {
       Pokemon.create({
         name: pokemon.name,
         hp: pokemon.hp,
-        cp: pokemon.cp,
-        picture: pokemon.picture,
+        /* cp: pokemon.cp,
+        picture: pokemon.picture, */
+        atk: pokemon.atk,
+        def: pokemon.def,
+        s_atk: pokemon.s_atk,
+        s_def: pokemon.s_def,
+        spd: pokemon.spd,
+        gen: pokemon.gen,
+        legendary: pokemon.legendary,
+        evolves_from_id: pokemon.evolves_from_id,
         types: pokemon.types
       }).then(pokemon => console.log(pokemon.toJSON()))
     })
@@ -55,7 +66,7 @@ const initDb = () => {
     console.log('La base de donnée a bien été initialisée !')
   })
 }
-  
+
 module.exports = { 
   initDb, Pokemon, User
 }
